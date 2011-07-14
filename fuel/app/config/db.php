@@ -19,7 +19,7 @@ return array(
 			'hostname'   => 'localhost',
 			'database'   => 'dev_mjs_me',
 			'username'   => 'root',
-			'password'   => 'mysql_passw0rd',
+			'password'   => '',
 			'persistent' => false,
 		),
 		'table_prefix' => '',
