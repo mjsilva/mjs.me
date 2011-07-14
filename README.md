@@ -13,4 +13,4 @@ MJS.ME allows you to shrink your huge link.
 
 ##License
 
-ScrapYrd is released under the MIT License.
+MJS.ME is released under the MIT License.
