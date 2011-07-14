@@ -9,30 +9,30 @@
 
 class Model_Url {
 
-	public function short_url_exist($short_url)
+	public static function short_url_exist($short_url)
 	{
 		$result = DB::select("*")->from('urls')->where("short_url", $short_url)->execute();
 		return (count($result) > 0);
 	}
 
-	public function get_last_short_url($exclude_legacy = TRUE)
+	public static function get_last_short_url($exclude_legacy = TRUE)
 	{
 		$result = DB::select("short_url")->from('urls')->where("legacy", 0)->order_by("id", "desc")->limit(1)->execute()->current();
 		return $result["short_url"];
 	}
 
-	public function get_url($short_url)
+	public static function get_url($short_url)
 	{
 		$result = DB::select("*")->from('urls')->where("short_url", $short_url)->limit(1)->execute()->current();
 		return $result;
 	}
 
-	public function set_url($db_data)
+	public static function set_url($db_data)
 	{
 		return DB::insert('urls')->set($db_data)->execute();
 	}
 
-	public function set_url_hit($db_data)
+	public static function set_url_hit($db_data)
 	{
 		DB::insert('url_tracking')->set($db_data)->execute();
 		$result = DB::select("hits")->from('urls')->where("short_url", $db_data["short_url"])->execute()->current();
@@ -45,13 +45,13 @@ class Model_Url {
 		DB::update("urls")->set($hit_data)->where("short_url", $db_data["short_url"]);
 	}
 
-	public function get_url_hits($url)
+	public static function get_url_hits($url)
 	{
 		$result = DB::select("*")->from('url_tracking')->where("short_url", $url)->execute();
 		return $result->as_array();
 	}
 
-	public function get_short_urls($where = '')
+	public static function get_short_urls($where = '')
 	{
 		$query = DB::select("*");
 		$query->from('urls');
