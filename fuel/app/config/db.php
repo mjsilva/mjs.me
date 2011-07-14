@@ -17,9 +17,9 @@ return array(
 		'type'			=> 'mysql',
 		'connection'	=> array(
 			'hostname'   => 'localhost',
-			'database'   => 'dev_mjs_me',
+			'database'   => 'mjs_me',
 			'username'   => 'root',
-			'password'   => 'mysql_passw0rd',
+			'password'   => '',
 			'persistent' => false,
 		),
 		'table_prefix' => '',
@@ -32,7 +32,7 @@ return array(
 		'type'			=> 'mysql',
 		'connection'	=> array(
 			'hostname'   => 'localhost',
-			'database'   => 'fuel_prod',
+			'database'   => 'mjs_me',
 			'username'   => 'root',
 			'password'   => '',
 			'persistent' => false,
