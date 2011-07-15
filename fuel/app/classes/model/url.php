@@ -51,23 +51,31 @@ class Model_Url {
 		return $result->as_array();
 	}
 
-	public static function get_short_urls($where = '')
+	public static function get_short_urls($where = '', $order_by = '')
 	{
 		$query = DB::select("*");
 		$query->from('urls');
 
-		if(!empty($where) && is_array($where))
+		if ( !empty($where) && is_array($where) )
 		{
-			foreach($where as $field => $value)
+			foreach ( $where as $field => $value )
 			{
 				$query->where($field, $value);
+			}
+		}
+
+		if ( !empty($order_by) && is_array($order_by) )
+		{
+			foreach ( $order_by as $field => $order_type )
+			{
+				$query->order_by($field, $order_type);
 			}
 		}
 
 		$results = $query->execute();
 
 		return $results->as_array();
-		
+
 	}
 
 }

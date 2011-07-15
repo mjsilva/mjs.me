@@ -215,3 +215,21 @@ div.jGrowl div.jGrowl_info_1 div.jGrowl-message, div.jGrowl div.jGrowl_info_1 di
 div.jGrowl div.jGrowl_info_1 div.jGrowl-header {
 	font-size : medium;
 }
+
+/****************************************************************
+ * jGrowl_error_1
+ ****************************************************************/
+div.jGrowl div.jGrowl_error_1 {
+	background : #626262 url(../img/error.png) no-repeat 10px 10px;
+}
+
+div.jGrowl div.jGrowl_error_1 div.jGrowl-message,
+div.jGrowl div.jGrowl_error_1 div.jGrowl-header {
+	color      : white;
+	padding    : 5px 5px 5px 75px;
+	text-align : left
+}
+
+div.jGrowl div.jGrowl_error_1 div.jGrowl-header {
+	font-size : medium;
+}

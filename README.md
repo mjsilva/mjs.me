@@ -1,9 +1,13 @@
 #MJS.ME
 
 * [Website](http://mjs.me/)
-* Version: 1.1
+* Version: 1.2
 
 ##Changelog
+
+### v1.2
+* Update framework Core
+* Added protection against invalid URLs and loop redirects
 
 ### v1.1
 * Copy is now working

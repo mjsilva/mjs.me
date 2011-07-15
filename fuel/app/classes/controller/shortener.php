@@ -27,7 +27,18 @@ class Controller_Shortener extends Controller_Template {
 
 		$val = \Validation::factory();
 
-		$val->add('url', 'URL')->add_rule("required");
+		$val->add('url', 'URL')
+				->add_rule("required")
+				->add_rule("trim")
+				->add_rule("valid_url")
+				->add_rule(array("valid_domain" => function($url)
+				           {
+					           return (strpos($url, Config::get("base_url"), 0) === FALSE);
+				           }));
+
+
+		$val->set_message('valid_domain', 'This is already a mjs.me url.');
+		$val->set_message('valid_url', 'What? This is not a valid URL, focus!');
 
 		if ( $val->run() )
 		{
@@ -56,11 +67,23 @@ class Controller_Shortener extends Controller_Template {
 				exit(json_encode($response));
 			}
 		}
+		else
+		{
+			$errors = $val->show_errors();
+
+			if ( !empty($errors) )
+			{
+				if ( Input::is_ajax() )
+				{
+					exit(json_encode(array("errors" => $errors)));
+				}
+			}
+		}
 
 		$view = View::factory('form');
 		$view->set("validation", $val, false);
 
-		$user_urls = Model_Url::get_short_urls(array("user_id" => $user_id));
+		$user_urls = Model_Url::get_short_urls(array("user_id" => $user_id), array("date_created" => "desc"));
 		$view->set("user_urls", $user_urls, false);
 
 
@@ -121,7 +144,6 @@ class Controller_Shortener extends Controller_Template {
 				$chart_data[$month] += 1;
 			}
 		}
-
 
 		$view->set("chart_data", $chart_data, false);
 		$view->set("short_url", Config::get("base_url") . $url);

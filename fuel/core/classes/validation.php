@@ -147,7 +147,16 @@ class Validation {
 			{
 				preg_match('#\[(.*)\]#', $rule, $param);
 				$rule = substr($rule, 0, $pos);
-				call_user_func_array(array($field, 'add_rule'), array_merge(array($rule), explode(',', $param[1])));
+
+				// deal with rules that have comma's in the rule parameter
+				if (in_array($rule, array('match_pattern')))
+				{
+					call_user_func_array(array($field, 'add_rule'), array_merge(array($rule), array($param[1])));
+				}
+				else
+				{
+					call_user_func_array(array($field, 'add_rule'), array_merge(array($rule), explode(',', $param[1])));
+				}
 			}
 			else
 			{
@@ -290,7 +299,7 @@ class Validation {
 	 */
 	protected function _run_rule($rule, &$value, $params, $field)
 	{
-		$output = call_user_func_array($rule, array_merge(array($value), $params));
+		$output = call_user_func_array(reset($rule), array_merge(array($value), $params));
 
 		if ($output === false && $value !== false)
 		{

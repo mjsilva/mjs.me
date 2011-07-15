@@ -20,6 +20,11 @@ $(function()
 		{
 			if (!resp) return false;
 
+			if(typeof resp.errors != "undefined")
+			{
+				$.jGrowl(resp.errors, { header: 'Error', theme: 'jGrowl_error_1'});
+			}
+
 			var myShortenedSkeleton = $(shortenedSkeleton).clone();
 
 			$(myShortenedSkeleton).find("a.short_link").html(resp.short_link).attr("href", resp.short_link);
