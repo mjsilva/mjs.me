@@ -1,9 +1,12 @@
 #MJS.ME
 
 * [Website](http://mjs.me/)
-* Version: 1.2
+* Version: 1.2.1
 
 ##Changelog
+
+### v1.2.1
+* Fixed bug with url hit increment
 
 ### v1.2
 * Update framework Core

@@ -42,7 +42,7 @@ class Model_Url {
 			"date_last_hit" => Date::factory()->format("mysql")
 		);
 
-		DB::update("urls")->set($hit_data)->where("short_url", $db_data["short_url"]);
+		DB::update("urls")->set($hit_data)->where("short_url", $db_data["short_url"])->execute();
 	}
 
 	public static function get_url_hits($url)
