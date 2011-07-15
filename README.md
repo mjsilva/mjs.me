@@ -1,9 +1,12 @@
 #MJS.ME
 
 * [Website](http://mjs.me/)
-* Version: 1.2.1
+* Version: 1.2.2
 
 ##Changelog
+
+### v1.2.2
+* CSS fix
 
 ### v1.2.1
 * Fixed bug with url hit increment
