@@ -186,6 +186,10 @@ a:visited{
 	width: 260px;
 }
 
+.short_link_ct .copy_bto{
+	font-size: 0.8em;
+}
+
 .stats_link {
 	margin-right: 10px;
 	width: 130px;
@@ -193,4 +197,21 @@ a:visited{
 
 .long_link {
 	width: 220px;
+}
+
+/****************************************************************
+ * jGrowl_info_1
+ ****************************************************************/
+div.jGrowl div.jGrowl_info_1 {
+	background : #626262 url(../img/info.png) no-repeat 10px 10px;
+}
+
+div.jGrowl div.jGrowl_info_1 div.jGrowl-message, div.jGrowl div.jGrowl_info_1 div.jGrowl-header {
+	color      : white;
+	padding    : 5px 5px 5px 75px;
+	text-align : left
+}
+
+div.jGrowl div.jGrowl_info_1 div.jGrowl-header {
+	font-size : medium;
 }

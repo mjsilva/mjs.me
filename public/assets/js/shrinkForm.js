@@ -1,6 +1,5 @@
 $(function()
 {
-
 	var shortenedSkeleton = '<li class="link_details clearfix">' +
 			'<div class="short_link_ct clearfix">' +
 			'<a class="short_link" href="#"></a>' +
@@ -30,13 +29,25 @@ $(function()
 			$("ul#shortened_results").prepend(myShortenedSkeleton);
 			$("#url_input input").val("");
 
-			if(!$("#shortened").is(":visible"))
+			if (!$("#shortened").is(":visible"))
 			{
 				$("#shortened").fadeIn();
 			}
 
 		}, "json");
 
+	});
+
+	$(".copy_bto").zclip({
+		path:'assets/swf/ZeroClipboard.swf',
+		copy: function()
+		{
+			return $(this).parents(".short_link_ct").find(".short_link").eq(0).attr("href");
+		},
+		afterCopy: function()
+		{
+			$.jGrowl("Short Link has been copied to your clipboard.", { header: 'Info', theme: 'jGrowl_info_1'});
+		}
 	});
 
 });

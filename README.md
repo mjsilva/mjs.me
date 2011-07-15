@@ -1,7 +1,13 @@
 #MJS.ME
 
 * [Website](http://mjs.me/)
-* Version: 1.0
+* Version: 1.1
+
+##Changelog
+
+### v1.0
+* Copy is now working
+* Added growl like notifications
 
 ## Description
 

@@ -1,4 +1,7 @@
+<?php echo Asset::js('jquery.zclip.min.js'); ?>
+<?php echo Asset::js('jquery.jgrowl_minimized.js'); ?>
 <?php echo Asset::js('shrinkForm.js'); ?>
+<?php echo Asset::css('jquery.jgrowl.css'); ?>
 <div id="shrink_container">
 
 	<div id="url_container">
@@ -26,7 +29,7 @@
 							<?php echo  Config::get("base_url") . $url["short_url"] ?>
 						</a>
 						<span class="clippy">
-							<a class="copy_bto" href="#">Copy</a>
+							<a class="copy_bto" title="Copy short link to clipboard" href="#" data-short_link="<?php echo Config::get("base_url") . $url["short_url"] ?>">Copy</a>
 						</span>
 					</div>
 					<a class="stats_link" href="<?php echo Config::get("base_url") . $url["short_url"] . "/stats" ?>">
