@@ -205,9 +205,48 @@ a:visited {
 	width: 710px;
 	margin: 0 auto;
 	padding: 5px;
-	text-align:right;
+	text-align: right;
 }
 
+#register_container {
+	width: 690px;
+	margin: 0 auto;
+	padding: 26px;
+}
+
+#register_container p {
+	margin-bottom: 10px;
+}
+
+#register_container .error{
+	color: #a10000;
+}
+
+#register_container label {
+	width: 120px;
+	display: inline-block;
+	text-align: left;
+}
+
+#register_container #form_username,
+#register_container #form_password,
+#register_container #form_email, 
+#register_container #form_confirm_password {
+	background: none repeat scroll 0 0 #FFFFFF;
+	border: 1px solid #CCCCCC;
+	font-size: 16px;
+	height: 19px;
+	padding: 5px 10px;
+}
+
+#register_container #submit_container {
+	margin-top: 30px;
+	margin-left: 245px;
+}
+
+#shrink_container .text{
+	padding: 5px;
+}
 /****************************************************************
  * jGrowl_info_1
  ****************************************************************/
