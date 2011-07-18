@@ -3,7 +3,9 @@
 <?php echo Asset::js('shrinkForm.js'); ?>
 <?php echo Asset::css('jquery.jgrowl.css'); ?>
 <div id="shrink_container">
-
+	<div id="login_container">
+		<?php echo Html::anchor("auth/login","login") ?> | <?php echo Html::anchor("auth/register","register") ?>
+	</div>
 	<div id="url_container">
 		<?php echo Form::open(array('action' => Uri::create('set_url'), "id" => "shortener_form")); ?>
 		<div id="url_input">

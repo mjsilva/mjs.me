@@ -4,6 +4,7 @@ return array(
 	'_404_' => 'shortener/404', // The main 404 route
 
 
+	'auth/(:any)' => 'auth/$1',
 	'set_url' => 'shortener/set_url',
 	'(:any)/stats' => 'shortener/stats/$1',
 	'(:any)' => 'shortener/get_url/$1',
