@@ -54,7 +54,7 @@ class Controller_Shortener extends Controller_Template {
 
 			Model_Url::set_url($db_data);
 
-			$short_url = Config::get('base_url') . $short_url;
+			$short_url = \Fuel\Core\Uri::base() . $short_url;
 
 			if ( Input::is_ajax() )
 			{

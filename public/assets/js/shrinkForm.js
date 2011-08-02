@@ -1,5 +1,4 @@
-$(function()
-{
+$(function() {
 	var shortenedSkeleton = '<li class="link_details clearfix">' +
 			'<div class="short_link_ct clearfix">' +
 			'<a class="short_link" href="#"></a>' +
@@ -11,17 +10,14 @@ $(function()
 			'<a class="long_link" href="#"></a>' +
 			'</li>';
 
-	$("#shortener_form").submit(function(e)
-	{
+	$("#shortener_form").submit(function(e) {
 
 		e.preventDefault();
 
-		$.post($(this).attr("action"), {url: $("#form_url").val()}, function(resp)
-		{
+		$.post($(this).attr("action"), {url: $("#form_url").val()}, function(resp) {
 			if (!resp) return false;
 
-			if(typeof resp.errors != "undefined")
-			{
+			if (typeof resp.errors != "undefined") {
 				$.jGrowl(resp.errors, { header: 'Error', theme: 'jGrowl_error_1'});
 			}
 
@@ -34,25 +30,30 @@ $(function()
 			$("ul#shortened_results").prepend(myShortenedSkeleton);
 			$("#url_input input").val("");
 
-			if (!$("#shortened").is(":visible"))
-			{
+			if (!$("#shortened").is(":visible")) {
 				$("#shortened").fadeIn();
 			}
+
+			assignZclipTrigger();
 
 		}, "json");
 
 	});
 
+	assignZclipTrigger();
+});
+
+var assignZclipTrigger = function() {
+
+	$('.copy_bto').zclip('remove');
 	$(".copy_bto").zclip({
 		path:'assets/swf/ZeroClipboard.swf',
-		copy: function()
-		{
+		copy: function() {
 			return $(this).parents(".short_link_ct").find(".short_link").eq(0).attr("href");
 		},
-		afterCopy: function()
-		{
+		afterCopy: function() {
 			$.jGrowl("Short Link has been copied to your clipboard.", { header: 'Info', theme: 'jGrowl_info_1'});
 		}
 	});
-
-});
+	
+}
