@@ -366,6 +366,7 @@ class Form {
 		else
 		{
 			$attributes['name'] = (string) $field;
+			$value = isset($value) ? $value :  $attributes['name'];
 		}
 
 		return html_tag('button', static::attr_to_string($attributes), $value);
@@ -469,7 +470,11 @@ class Form {
 		if (is_array($field))
 		{
 			$attributes = $field;
-			$attributes['selected'] = ! isset($attributes['value']) ? null : $attributes['value'];
+
+			if ( ! isset($attributes['selected']))
+			{
+				$attributes['selected'] = ! isset($attributes['value']) ? null : $attributes['value'];
+			}
 		}
 		else
 		{
@@ -673,6 +678,12 @@ class Form {
 			}
 		}
 
+		// Add IDs when auto-id is on
+		if ($this->get_config('auto_id', false) === true and $field->get_attribute('id') == '')
+		{
+			$field->set_attribute('id', $this->get_config('auto_id_prefix', '').$field->name);
+		}
+
 		switch($field->type)
 		{
 			case 'hidden':
@@ -697,11 +708,7 @@ class Form {
 							$attributes['checked'] = 'checked';
 						}
 
-						if (empty($attributes['id']) && $this->get_config('auto_id', false) == true)
-						{
-							$attributes['id'] = $this->get_config('auto_id_prefix', '').$field->name.'_'.$i;
-						}
-						elseif( ! empty($attributes['id']))
+						if( ! empty($attributes['id']))
 						{
 							$attributes['id'] .= '_'.$i;
 						}
@@ -933,4 +940,4 @@ class Form {
 	}
 }
 
-/* End of file form.php */
+

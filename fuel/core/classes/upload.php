@@ -47,6 +47,7 @@ class Upload {
 	const UPLOAD_ERR_MAX_FILENAME_LENGTH	= 108;
 	const UPLOAD_ERR_MOVE_FAILED			= 109;
 	const UPLOAD_ERR_DUPLICATE_FILE 		= 110;
+	const UPLOAD_ERR_MKDIR_FAILED			= 111;
 
 	/* ---------------------------------------------------------------------------
 	 * STATIC PROPERTIES
@@ -125,7 +126,7 @@ class Upload {
 		// make sure we have defaults for those not defined
 		static::$config = array_merge(static::$_defaults, \Config::get('upload', array()));
 
-		static::$config['auto_process'] and self::process();
+		static::$config['auto_process'] and static::process();
 	}
 
 	// ---------------------------------------------------------------------------
@@ -559,6 +560,19 @@ class Upload {
 							static::$files[$key]['error'] = $result;
 						}
 					}
+
+					// recheck the saved_to path, it might have been altered
+					if ( ! is_dir(static::$files[$key]['saved_to']) and (bool) static::$config['create_path'])
+					{
+						$oldumask = umask(0);
+						@mkdir(static::$files[$key]['saved_to'], static::$config['path_chmod'], true);
+						umask($oldumask);
+					}
+					if ( ! is_dir(static::$files[$key]['saved_to']))
+					{
+						static::$files[$key]['error'] = static::UPLOAD_ERR_MKDIR_FAILED;
+						continue;
+					}
 				}
 
 				// move the uploaded file
@@ -597,4 +611,4 @@ class Upload {
 
 }
 
-/* End of file upload.php */
+

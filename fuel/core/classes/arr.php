@@ -35,7 +35,7 @@ class Arr {
 		{
 			return null;
 		}
-		
+
 		$output = array();
 		foreach($assoc as $row)
 		{
@@ -44,8 +44,35 @@ class Arr {
 				$output[$row[$key_field]] = $row[$val_field];
 			}
 		}
-		
+
 		return $output;
+	}
+
+	/**
+	 * Converts the given 1 dimensional non-associative array to an associative
+	 * array.
+	 *
+	 * The array given must have an even number of elements or null will be returned.
+	 *
+	 *     Arr::to_assoc(array('foo','bar'));
+	 *
+	 * @param   string      $arr  the array to change
+	 * @return  array|null  the new array or null
+	 */
+	public static function to_assoc($arr)
+	{
+		if (($count = count($arr)) % 2 > 0)
+		{
+			return null;
+		}
+		$keys = $vals = array();
+
+		for ($i = 0; $i < $count - 1; $i += 2)
+		{
+			$keys[] = array_shift($arr);
+			$vals[] = array_shift($arr);
+		}
+		return array_combine($keys, $vals);
 	}
 
 	/**
@@ -55,9 +82,10 @@ class Arr {
 	 * @param   array   the array to flatten
 	 * @param   string  what to glue the keys together with
 	 * @param   bool    whether to reset and start over on a new array
+	 * @param   bool    whether to flatten only associative array's, or also indexed ones
 	 * @return  array
 	 */
-	public static function flatten_assoc($array, $glue = ':', $reset = true)
+	public static function flatten($array, $glue = ':', $reset = true, $indexed = true)
 	{
 		static $return = array();
 		static $curr_key = array();
@@ -71,7 +99,7 @@ class Arr {
 		foreach ($array as $key => $val)
 		{
 			$curr_key[] = $key;
-			if (is_array($val) and array_values($val) !== $val)
+			if (is_array($val) and ($indexed or array_values($val) !== $val))
 			{
 				static::flatten_assoc($val, $glue, false);
 			}
@@ -82,6 +110,20 @@ class Arr {
 			array_pop($curr_key);
 		}
 		return $return;
+	}
+
+	/**
+	 * Flattens a multi-dimensional associative array down into a 1 dimensional
+	 * associative array.
+	 *
+	 * @param   array   the array to flatten
+	 * @param   string  what to glue the keys together with
+	 * @param   bool    whether to reset and start over on a new array
+	 * @return  array
+	 */
+	public static function flatten_assoc($array, $glue = ':', $reset = true)
+	{
+		return static::flatten($array, $glue, $reset, false);
 	}
 
 	/**
@@ -355,6 +397,55 @@ class Arr {
 		return $result;
 	}
 
+	/**
+	 * Merge 2 arrays recursively, differs in 2 important ways from array_merge_recursive()
+	 * - When there's 2 different values and not both arrays, the latter value overwrites the earlier
+	 *   instead of merging both into an array
+	 * - Numeric keys that don't conflict aren't changed, only when a numeric key already exists is the
+	 *   value added using array_push()
+	 *
+	 * @param   array  multiple variables all of which must be arrays
+	 * @return  array
+	 * @throws  \InvalidArgumentException
+	 */
+	public static function merge()
+	{
+		$array  = func_get_arg(0);
+		$arrays = array_slice(func_get_args(), 1);
+
+		if ( ! is_array($array))
+		{
+			throw new \InvalidArgumentException('Arr::merge() - all arguments must be arrays.');
+		}
+
+		foreach ($arrays as $arr)
+		{
+			if ( ! is_array($arr))
+			{
+				throw new \InvalidArgumentException('Arr::merge() - all arguments must be arrays.');
+			}
+
+			foreach ($arr as $k => $v)
+			{
+				// numeric keys are appended
+				if (is_int($k))
+				{
+					array_key_exists($k, $array) ? array_push($array, $v) : $array[$k] = $v;
+				}
+				elseif (is_array($v) and array_key_exists($k, $array) and is_array($array[$k]))
+				{
+					$array[$k] = static::merge($array[$k], $v);
+				}
+				else
+				{
+					$array[$k] = $v;
+				}
+			}
+		}
+
+		return $array;
+	}
+
 }
 
-/* End of file arr.php */
+

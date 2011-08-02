@@ -74,6 +74,11 @@ class Error {
 	 */
 	public static function exception_handler(\Exception $e)
 	{
+		if ($e instanceof Request404Exception)
+		{
+			\Request::show_404();
+		}
+
 		$severity = ( ! isset(static::$levels[$e->getCode()])) ? $e->getCode() : static::$levels[$e->getCode()];
 		logger(Fuel::L_ERROR, $severity.' - '.$e->getMessage().' in '.$e->getFile().' on line '.$e->getLine());
 
@@ -128,7 +133,7 @@ class Error {
 	 */
 	public static function show_php_error(\Exception $e)
 	{
-		$fatal = (bool)( ! in_array($e->getCode(), \Config::get('errors.continue_on')));
+		$fatal = (bool)( ! in_array($e->getCode(), \Config::get('errors.continue_on', array())));
 		$data = static::prepare_exception($e, $fatal);
 
 		if ($fatal)
@@ -229,4 +234,4 @@ class Error {
 
 }
 
-/* End of file error.php */
+
