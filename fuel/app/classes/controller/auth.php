@@ -14,30 +14,37 @@ class Controller_Auth extends Controller_Template {
 	public function action_register()
 	{
 
-		$val = \Validation::factory();
+		$val = Validation::factory();
 
-		$val->add('username', 'Username')->add_rule("required");
+		$val->add('username', 'Username')->add_rule("required")->add_rule(array("username_exists" => function($value)
+		                                                                  { return !count(Model_Auth::get_user(array("username" => $value))); }));
 		$val->add('password', 'Password')->add_rule("required");
 		$val->add('confirm_password', 'Confirm Password')
 				->add_rule("required")
 				->add_rule(array("match_password" => function($value)
-		{ return ($value === Input::post('password')); }));
+				           { return ($value === Input::post('password')); }));
 
 		$val->add('email', 'Email')->add_rule("valid_email");
 
 		$val->set_message('confirm_password', 'Password fields does not match.');
+		$val->set_message('username_exists', 'Someone beat you, that username already exists.');
 
 		if ( $val->run() )
 		{
+
+			$pass_hasher = new Phpass_Passwordhash(8, TRUE);
+
 			$db_data = array(
 				"username" => $val->validated('username'),
-				"password" => sha2(self::$salt . $val->validated('password')),
+				"password" => $pass_hasher->HashPassword($val->validated('password')),
 				"email" => $val->validated('email')
 			);
 
-			Auth_model::set_user($db_data);
+			Model_Auth::set_user($db_data);
 
-			//Success
+			\Fuel\Core\Session::set_flash("message", "Successfully registered you can now login.");
+
+			\Fuel\Core\Response::redirect(\Fuel\Core\Uri::base());
 		}
 		else
 		{
@@ -61,9 +68,57 @@ class Controller_Auth extends Controller_Template {
 		}
 		else
 		{
-			$salt = substr($salt, 0, SALT_LENGTH);
+			$salt = substr($salt, 0, self::$salt_length);
 		}
+
 		return hash('sha512', $salt . $key . $phrase);
 	}
 
+	public function action_login()
+	{
+		$val = Validation::factory();
+
+		$val->add('username', 'Username')->add_rule("required");
+		$val->add('password', 'Password')->add_rule("required")
+				->add_rule(array("valid_user" => array($this, "_callback_valid_user")));
+
+		$val->set_message('confirm_password', 'Password fields does not match.');
+		$val->set_message('valid_user', 'Access Denied.');
+
+
+		if ( $val->run() )
+		{
+			$this->template->set("title", "Shrink your huge URL");
+			$this->template->set("content", "", false);
+			// session start
+
+			//assign current cookie urls to user id
+
+			// get urls
+
+			//redirect to home
+		}
+		else
+		{
+			$view = View::factory('login');
+			$view->set("validation", $val, false);
+
+			$this->template->set("title", "Shrink your huge URL");
+			$this->template->set("content", $view, false);
+		}
+	}
+
+	public function _callback_valid_user($password)
+	{
+		$pass_hasher = new Phpass_Passwordhash(8, TRUE);
+
+		$user = Model_Auth::get_user(array("username" => Input::post('username')));
+
+		if ( count($user) == 0 ) return false;
+
+		$user = $user->current();
+		$hashed_password = $user["password"];
+
+		return $pass_hasher->CheckPassword($password, $hashed_password);
+	}
 }

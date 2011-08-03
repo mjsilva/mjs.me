@@ -1,9 +1,8 @@
 <?php echo Asset::js('jquery.zclip.min.js'); ?>
-<?php echo Asset::js('jquery.jgrowl_minimized.js'); ?>
 <?php echo Asset::js('shrinkForm.js'); ?>
 <?php echo Asset::css('jquery.jgrowl.css'); ?>
 <div id="shrink_container">
-	<div id="login_container">
+	<div id="actions_container">
 		<?php echo Html::anchor("auth/login","login") ?> | <?php echo Html::anchor("auth/register","register") ?>
 	</div>
 	<div id="url_container">

@@ -99,7 +99,7 @@ a:visited {
 }
 
 #url_submit input:hover {
-/*border: 1px solid #CCC;*/
+	/*border: 1px solid #CCC;*/
 	cursor: pointer;
 }
 
@@ -200,7 +200,7 @@ a:visited {
 	width: 220px;
 }
 
-#login_container {
+#actions_container {
 	height: 15px;
 	width: 710px;
 	margin: 0 auto;
@@ -208,45 +208,65 @@ a:visited {
 	text-align: right;
 }
 
-#register_container {
+#form_container {
 	width: 690px;
 	margin: 0 auto;
 	padding: 26px;
 }
 
-#register_container p {
+#form_container p {
 	margin-bottom: 10px;
 }
 
-#register_container .error{
+#form_container .error {
 	color: #a10000;
 }
 
-#register_container label {
+#form_container label {
 	width: 120px;
 	display: inline-block;
 	text-align: left;
 }
-
-#register_container #form_username,
-#register_container #form_password,
-#register_container #form_email, 
-#register_container #form_confirm_password {
+#form_container em{
+	color: #a10000;
+	padding-left: 2px;
+}
+#form_container #form_username,
+#form_container #form_password,
+#form_container #form_email,
+#form_container #form_confirm_password {
 	background: none repeat scroll 0 0 #FFFFFF;
 	border: 1px solid #CCCCCC;
 	font-size: 16px;
 	height: 19px;
 	padding: 5px 10px;
+	width: 200px;
+	color: #626262;
 }
 
-#register_container #submit_container {
+#form_container #submit_container {
 	margin-top: 30px;
 	margin-left: 245px;
 }
 
-#shrink_container .text{
+#shrink_container .text {
 	padding: 5px;
 }
+
+#form_container fieldset {
+	margin: 0 auto;
+	width: 400px;
+	border-top: 1px dashed #626262;
+	border-bottom: 1px dashed #626262;
+	padding-bottom: 10px;
+	padding-top: 10px;
+}
+
+#form_container .email{
+	border-top: none;
+	margin-top: 10px;
+}
+
 /****************************************************************
  * jGrowl_info_1
  ****************************************************************/
