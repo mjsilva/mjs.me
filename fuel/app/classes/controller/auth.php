@@ -32,15 +32,7 @@ class Controller_Auth extends Controller_Template {
 		if ( $val->run() )
 		{
 
-			$pass_hasher = new Phpass_Passwordhash(8, TRUE);
-
-			$db_data = array(
-				"username" => $val->validated('username'),
-				"password" => $pass_hasher->HashPassword($val->validated('password')),
-				"email" => $val->validated('email')
-			);
-
-			Model_Auth::set_user($db_data);
+			Auth::instance('DerpAuth')->create_user(Input::post("username"), Input::post("password"), Input::post("email"));
 
 			\Fuel\Core\Session::set_flash("message", "Successfully registered you can now login.");
 
@@ -56,22 +48,6 @@ class Controller_Auth extends Controller_Template {
 			$this->template->set("content", $view, false);
 
 		}
-	}
-
-	private static function hash_me($phrase, &$salt = null)
-	{
-		$key = 'g@s%s#!$%&FDg$s+«sd==%&%$,.55232**';
-
-		if ( $salt == '' )
-		{
-			$salt = substr(hash('sha512', uniqid(rand(), true) . $key . microtime()), 0, self::$salt_length);
-		}
-		else
-		{
-			$salt = substr($salt, 0, self::$salt_length);
-		}
-
-		return hash('sha512', $salt . $key . $phrase);
 	}
 
 	public function action_login()
@@ -110,15 +86,13 @@ class Controller_Auth extends Controller_Template {
 
 	public function _callback_valid_user($password)
 	{
-		$pass_hasher = new Phpass_Passwordhash(8, TRUE);
+		return Auth::instance('DerpAuth')->login(Input::post('username'), $password);
+	}
 
-		$user = Model_Auth::get_user(array("username" => Input::post('username')));
-
-		if ( count($user) == 0 ) return false;
-
-		$user = $user->current();
-		$hashed_password = $user["password"];
-
-		return $pass_hasher->CheckPassword($password, $hashed_password);
+	public function action_test()
+	{
+		echo "One: " . Auth::instance('DerpAuth')->hash_password("123456");
+		echo "<br />";
+		echo "Two: " . Auth::instance('DerpAuth')->hash_password("123456");
 	}
 }

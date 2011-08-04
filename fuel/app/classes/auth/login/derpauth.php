@@ -10,12 +10,12 @@
  * @link       http://fuelphp.com
  */
 
-namespace Auth;
+//namespace Auth;
 
 
-class SimpleUserUpdateException extends \Fuel_Exception {}
+class SimpleUserUpdateException extends \Fuel\Core\Fuel_Exception {}
 
-class SimpleUserWrongPassword extends \Fuel_Exception {}
+class SimpleUserWrongPassword extends \Fuel\Core\Fuel_Exception {}
 
 /**
  * SimpleAuth basic login driver
@@ -23,11 +23,11 @@ class SimpleUserWrongPassword extends \Fuel_Exception {}
  * @package     Fuel
  * @subpackage  Auth
  */
-class Auth_Login_SimpleAuth extends \Auth_Login_Driver {
+class Auth_Login_DerpAuth extends \Auth\Auth_Login_Driver {
 
 	public static function _init()
 	{
-		\Config::load('simpleauth', true);
+		\Config::load('derpauth', true);
 	}
 
 	/**
@@ -67,7 +67,7 @@ class Auth_Login_SimpleAuth extends \Auth_Login_Driver {
 		{
 			$this->user = \DB::select()
 				->where('username', '=', $username)
-				->from(\Config::get('simpleauth.table_name'))
+				->from(\Config::get('derpauth.table_name'))
 				->execute()->current();
 		}
 
@@ -76,7 +76,7 @@ class Auth_Login_SimpleAuth extends \Auth_Login_Driver {
 			return true;
 		}
 
-		$this->user = \Config::get('simpleauth.guest_login', true) ? static::$guest_login : false;
+		$this->user = \Config::get('derpauth.guest_login', true) ? static::$guest_login : false;
 		\Session::delete('username');
 		\Session::delete('login_hash');
 
@@ -104,12 +104,12 @@ class Auth_Login_SimpleAuth extends \Auth_Login_Driver {
 		$this->user = \DB::select()
 			->where('username', '=', $username)
 			->where('password', '=', $password)
-			->from(\Config::get('simpleauth.table_name'))
+			->from(\Config::get('derpauth.table_name'))
 			->execute()->current();
 
 		if ($this->user == false)
 		{
-			$this->user = \Config::get('simpleauth.guest_login', true) ? static::$guest_login : false;
+			$this->user = \Config::get('derpauth.guest_login', true) ? static::$guest_login : false;
 			\Session::delete('username');
 			\Session::delete('login_hash');
 			return false;
@@ -127,7 +127,7 @@ class Auth_Login_SimpleAuth extends \Auth_Login_Driver {
 	 */
 	public function logout()
 	{
-		$this->user = \Config::get('simpleauth.guest_login', true) ? static::$guest_login : false;
+		$this->user = \Config::get('derpauth.guest_login', true) ? static::$guest_login : false;
 		\Session::delete('username');
 		\Session::delete('login_hash');
 		return true;
@@ -143,11 +143,11 @@ class Auth_Login_SimpleAuth extends \Auth_Login_Driver {
 	 * @param   Array
 	 * @return  bool
 	 */
-	public function create_user($username, $password, $email, $group = 1, Array $profile_fields = array())
+	public function create_user($username, $password, $email = null, $group = 1, Array $profile_fields = array())
 	{
 		$email = filter_var(trim($email), FILTER_VALIDATE_EMAIL);
 
-		if (empty($username) or empty($password) or empty($email))
+		if (empty($username) or empty($password))
 		{
 			throw new \SimpleUserUpdateException('Username, password and emailaddress can\'t be empty.');
 		}
@@ -155,7 +155,7 @@ class Auth_Login_SimpleAuth extends \Auth_Login_Driver {
 		$same_users = \DB::select()
 			->where('username', '=', $username)
 			->or_where('email', '=', $email)
-			->from(\Config::get('simpleauth.table_name'))
+			->from(\Config::get('derpauth.table_name'))
 			->execute();
 
 		if ($same_users->count() > 0)
@@ -177,7 +177,7 @@ class Auth_Login_SimpleAuth extends \Auth_Login_Driver {
 			'group'           => (int) $group,
 			'profile_fields'  => serialize($profile_fields)
 		);
-		$result = \DB::insert(\Config::get('simpleauth.table_name'))
+		$result = \DB::insert(\Config::get('derpauth.table_name'))
 			->set($user)
 			->execute();
 
@@ -197,7 +197,7 @@ class Auth_Login_SimpleAuth extends \Auth_Login_Driver {
 		$username = $username ?: $this->user['username'];
 		$current_values = \DB::select()
 			->where('username', '=', $username)
-			->from(\Config::get('simpleauth.table_name'))->execute();
+			->from(\Config::get('derpauth.table_name'))->execute();
 
 		if (empty($current_values))
 		{
@@ -261,7 +261,7 @@ class Auth_Login_SimpleAuth extends \Auth_Login_Driver {
 			$update['profile_fields'] = serialize($profile_fields);
 		}
 
-		$affected_rows = \DB::update(\Config::get('simpleauth.table_name'))
+		$affected_rows = \DB::update(\Config::get('derpauth.table_name'))
 			->set($update)
 			->where('username', '=', $username)
 			->execute();
@@ -271,7 +271,7 @@ class Auth_Login_SimpleAuth extends \Auth_Login_Driver {
 		{
 			$this->user = \DB::select()
 				->where('username', '=', $username)
-				->from(\Config::get('simpleauth.table_name'))
+				->from(\Config::get('derpauth.table_name'))
 				->execute()->current();
 		}
 
@@ -312,7 +312,7 @@ class Auth_Login_SimpleAuth extends \Auth_Login_Driver {
 			throw new \SimpleUserUpdateException('Cannot delete user with empty username');
 		}
 
-		$affected_rows = \DB::delete(\Config::get('simpleauth.table_name'))
+		$affected_rows = \DB::delete(\Config::get('derpauth.table_name'))
 			->where('username', '=', $username)
 			->execute();
 
@@ -332,9 +332,9 @@ class Auth_Login_SimpleAuth extends \Auth_Login_Driver {
 		}
 
 		$last_login = \Date::factory()->get_timestamp();
-		$login_hash = sha1(\Config::get('simpleauth.login_hash_salt').$this->user['username'].$last_login);
+		$login_hash = sha1(\Config::get('derpauth.login_hash_salt').$this->user['username'].$last_login);
 
-		\DB::update(\Config::get('simpleauth.table_name'))
+		\DB::update(\Config::get('derpauth.table_name'))
 			->set(array('last_login' => $last_login, 'login_hash' => $login_hash))
 			->where('username', '=', $this->user['username'])->execute();
 
@@ -436,8 +436,8 @@ class Auth_Login_SimpleAuth extends \Auth_Login_Driver {
 	 */
 	public function guest_login()
 	{
-		return \Config::get('simpleauth.guest_login', true);
+		return \Config::get('derpauth.guest_login', true);
 	}
 }
 
-// end of file simpleauth.php
+// end of file derpauth.php

@@ -17,9 +17,9 @@ return array(
 		'type'			=> 'mysql',
 		'connection'	=> array(
 			'hostname'   => 'localhost',
-			'database'   => 'dev_mjs_me',
+			'database'   => 'dev.rks.bz',
 			'username'   => 'root',
-			'password'   => 'mysql_passw0rd',
+			'password'   => 'passw0rd',
 			'persistent' => false,
 		),
 		'table_prefix' => '',

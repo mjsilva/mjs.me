@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="utf-8">
-	<title>Shrink your huge URL | MJS.ME</title>
+	<title>Rackspot URL Shortener | RSK.BZ</title>
 
 	<!--CSS LOAD-->
 	<?php echo Asset::css('reset.css'); ?>
@@ -34,7 +34,7 @@
 <div id="wrapper">
 
 	<div id="header_container">
-		<h1 id="logo"><?php echo Html::anchor(Config::get("base_url"), "MJS.ME")?></h1>
+		<h1 id="logo"><?php echo Html::anchor(Config::get("base_url"), "RSK.BZ")?></h1>
 
 		<div id="title_header"><h3><?php echo isset($title) ? $title :""; ?></h3></div>
 	</div>
