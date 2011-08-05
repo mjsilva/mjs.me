@@ -20,7 +20,7 @@
  */
 
 return array(
-	'driver' => 'DerpAuth',
+	'driver' => 'derpauth',
 	'verify_multiple_logins' => false,
 	'salt' => 'Z2+_A%$KEj4f4f@U3!6xn_%)%meFrVjH=xc6_EE2CMXnrgN9qxfWZuz=Py%DTJV4',
 );

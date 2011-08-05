@@ -17,13 +17,17 @@ class Controller_Shortener extends Controller_Template {
 	public function action_set_url()
 	{
 
-		$user_id = Cookie::get('user_id');
-
-		if ( empty($user_id) )
+		if ( !Auth::check() )
 		{
-			$user_id = uniqid();
-			Cookie::set('user_id', $user_id, 60 * 60 * 24 * 360 * 10);
+			$cookie_id = Cookie::get('cookie_id');
+
+			if ( empty($cookie_id) )
+			{
+				$cookie_id = uniqid();
+				Cookie::set('cookie_id', $cookie_id, 60 * 60 * 24 * 360 * 10);
+			}
 		}
+
 
 		$val = \Validation::factory();
 
@@ -33,7 +37,7 @@ class Controller_Shortener extends Controller_Template {
 				->add_rule("valid_url")
 				->add_rule(array("valid_domain" => function($url)
 				           {
-					           return (strpos($url, Config::get("base_url"), 0) === FALSE);
+					           return (strpos($url, Uri::base(), 0) === FALSE);
 				           }));
 
 
@@ -44,17 +48,20 @@ class Controller_Shortener extends Controller_Template {
 		{
 			$short_url = $this->_get_short_url();
 
+			$user_id = Auth::instance()->get_user_id();
+
 			$db_data = array(
 				"short_url" => $short_url,
 				"real_url" => Input::post('url'),
 				"creator_ip_address" => Input::real_ip(),
 				"date_created" => Date::factory()->format("mysql"),
-				"user_id" => $user_id
+				"cookie_id" => Auth::check() ? : $cookie_id,
+				"user_id" => !$user_id ? : $user_id[1]
 			);
 
 			Model_Url::set_url($db_data);
 
-			$short_url = \Fuel\Core\Uri::base() . $short_url;
+			$short_url = Uri::base() . $short_url;
 
 			if ( Input::is_ajax() )
 			{
@@ -83,7 +90,18 @@ class Controller_Shortener extends Controller_Template {
 		$view = View::factory('form');
 		$view->set("validation", $val, false);
 
-		$user_urls = Model_Url::get_short_urls(array("user_id" => $user_id), array("date_created" => "desc"));
+		if(Auth::check())
+		{
+			$user_id = Auth::instance()->get_user_id();
+			$user_id = $user_id[1];
+			
+			$user_urls = Model_Url::get_short_urls(array("user_id" => $user_id), array("date_created" => "desc"));
+		}
+		else
+		{
+			$user_urls = Model_Url::get_short_urls(array("cookie_id" => $cookie_id), array("date_created" => "desc"));
+		}
+
 		$view->set("user_urls", $user_urls, false);
 
 

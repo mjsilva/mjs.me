@@ -3,7 +3,7 @@
 <?php echo Asset::css('jquery.jgrowl.css'); ?>
 <div id="shrink_container">
 	<div id="actions_container">
-		<?php echo Html::anchor("auth/login","login") ?> | <?php echo Html::anchor("auth/register","register") ?>
+		<?php echo (!Auth::check()) ? Html::anchor("auth/login","login") . " | ". Html::anchor("auth/register","register") : Html::anchor("auth/logout","logout")?>
 	</div>
 	<div id="url_container">
 		<?php echo Form::open(array('action' => Uri::create('set_url'), "id" => "shortener_form")); ?>

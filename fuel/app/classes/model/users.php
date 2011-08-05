@@ -1,6 +1,6 @@
 <?php
 
-Class Model_Auth {
+Class Model_Users {
 
 	public static function set_user($db_data)
 	{
@@ -14,4 +14,9 @@ Class Model_Auth {
 		return $query->execute();
 	}
 
+	public static function assign_cookie_to_user_id($cookie_id, $user_id)
+	{
+		DB::update("urls")->value("user_id", $user_id)->where("cookie_id", $cookie_id)->execute();
+		DB::update("urls")->value("cookie_id", null)->where("user_id", $user_id)->execute();
+	}
 }
