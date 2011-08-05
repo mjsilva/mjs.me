@@ -46,7 +46,7 @@ class Controller_Shortener extends Controller_Template {
 
 		if ( $val->run() )
 		{
-			$short_url = $this->_get_short_url();
+			$short_url = ShortUrl::get_short_url();
 
 			$user_id = Auth::instance()->get_user_id();
 
@@ -94,7 +94,7 @@ class Controller_Shortener extends Controller_Template {
 		{
 			$user_id = Auth::instance()->get_user_id();
 			$user_id = $user_id[1];
-			
+
 			$user_urls = Model_Url::get_short_urls(array("user_id" => $user_id), array("date_created" => "desc"));
 		}
 		else
@@ -105,15 +105,7 @@ class Controller_Shortener extends Controller_Template {
 		$view->set("user_urls", $user_urls, false);
 
 
-		$this->template->set("title", "Shrink your huge URL");
 		$this->template->set("content", $view, false);
-	}
-
-	private function _get_short_url()
-	{
-		$last_short_url = Model_Url::get_last_short_url();
-		$return = ($last_short_url === NULL) ? ShortUrl::next("") : ShortUrl::next($last_short_url);
-		return $return;
 	}
 
 	public function action_get_url($url)
@@ -167,7 +159,6 @@ class Controller_Shortener extends Controller_Template {
 		$view->set("short_url", Config::get("base_url") . $url);
 		$view->set("real_url", $url_db["real_url"]);
 
-		$this->template->set("title", "Shrink your huge URL");
 		$this->template->set("content", $view, false);
 
 		$this->response->body = $view;
@@ -186,7 +177,6 @@ class Controller_Shortener extends Controller_Template {
 
 		// Set a HTTP 404 output header
 		$this->response->status = 404;
-		$this->template->set("title", "Shrink your huge URL");
 		$this->template->set("content", View::factory('404', $data), false);
 	}
 

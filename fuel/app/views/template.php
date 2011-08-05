@@ -34,9 +34,9 @@
 <div id="wrapper">
 
 	<div id="header_container">
-		<h1 id="logo"><?php echo Html::anchor(Config::get("base_url"), "RSK.BZ")?></h1>
+		<h1 id="logo"><?php echo Html::anchor(Config::get("base_url"), Model_Options::get("site_name"))?></h1>
 
-		<div id="title_header"><h3><?php echo isset($title) ? $title :""; ?></h3></div>
+		<div id="title_header"><h3><?php echo isset($title) ? $title : Model_Options::get("site_title"); ?></h3></div>
 	</div>
 
 	<div id="content">

@@ -13,6 +13,11 @@ class Controller_Auth extends Controller_Template {
 
 	public function action_register()
 	{
+		if ( !Model_Options::get("public") )
+		{
+			Session::set_flash("message", "This is a private site, registering is disabled.");
+			Response::redirect(\Fuel\Core\Uri::base());
+		}
 
 		$val = Validation::factory();
 
@@ -35,7 +40,6 @@ class Controller_Auth extends Controller_Template {
 
 		if ( $val->run() )
 		{
-
 			if ( Auth::instance('derpauth')->create_user($val->validated("username"), $val->validated("password"), $val->validated("email")) )
 			{
 				Session::set_flash("message", "Successfully registered you can now login.");
@@ -52,8 +56,6 @@ class Controller_Auth extends Controller_Template {
 
 			$view = View::factory('register');
 			$view->set("validation", $val, false);
-
-			$this->template->set("title", "Shrink your huge URL");
 			$this->template->set("content", $view, false);
 
 		}
@@ -61,6 +63,12 @@ class Controller_Auth extends Controller_Template {
 
 	public function action_login()
 	{
+		if ( \Auth\Auth::check() )
+		{
+			Session::set_flash("message", "Duhh, you are already logged in.");
+			Response::redirect(\Fuel\Core\Uri::base());
+		}
+
 		$val = Validation::factory();
 
 		$val->add('username', 'Username')->add_rule("required");
@@ -73,7 +81,6 @@ class Controller_Auth extends Controller_Template {
 
 		if ( $val->run() )
 		{
-			$this->template->set("title", "Shrink your huge URL");
 			$this->template->set("content", "", false);
 
 			//assign current cookie urls to user id
@@ -94,7 +101,6 @@ class Controller_Auth extends Controller_Template {
 			$view = View::factory('login');
 			$view->set("validation", $val, false);
 
-			$this->template->set("title", "Shrink your huge URL");
 			$this->template->set("content", $view, false);
 		}
 	}

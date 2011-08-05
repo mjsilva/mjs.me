@@ -2,6 +2,15 @@
 
 class ShortUrl {
 
+
+	public static function get_short_url()
+	{
+		$last_short_url = Model_Url::get_last_short_url();
+		$return = ($last_short_url === NULL) ? static::next("") : static::next($last_short_url);
+		return $return;
+	}
+
+
 	public static function next($n, $pos = 0)
 	{
 		static $set = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_';

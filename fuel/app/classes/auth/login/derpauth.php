@@ -175,7 +175,8 @@ class Auth_Login_DerpAuth extends \Auth\Auth_Login_Driver {
 			'password'        => $this->hash_password((string) $password),
 			'email'           => $email,
 			'group'           => (int) $group,
-			'profile_fields'  => serialize($profile_fields)
+			'profile_fields'  => serialize($profile_fields),
+			'api_key'         => sha1($this->hash_password(uniqid()))
 		);
 		$result = \DB::insert(\Config::get('derpauth.table_name'))
 			->set($user)
