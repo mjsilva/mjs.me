@@ -44,7 +44,7 @@
 	</div>
 
 	<div id="footer">
-		<p>&copy;&nbsp;<?php echo Date::factory()->format("%Y");?> Manuel Joao Silva - Powered
+		<p>&copy;&nbsp;<?php echo Date::factory()->format("%Y");?> <?php echo Model_Options::get("copyright")?> - Powered
 		         by <?php echo Html::anchor("http://fuelphp.com", "FuelPHP")?> - Page Rendered in {exec_time}s using
 		         {mem_usage} MB of memory.</p>
 	</div>
