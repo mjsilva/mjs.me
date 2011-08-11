@@ -49,5 +49,6 @@
 		         {mem_usage} MB of memory.</p>
 	</div>
 </div>
+<?php echo Model_Options::get("analytics_code"); ?>
 </body>
 </html>
