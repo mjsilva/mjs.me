@@ -16,7 +16,7 @@ class Controller_Api extends Controller_Rest {
 
 		$user = Model_Users::get_user(array("api_key" => $api_key));
 
-		if ( !count($user) ) $this->response();
+		if ( !count($user) ) exit();
 
 		$user = $user[0];
 
