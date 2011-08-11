@@ -50,14 +50,14 @@
 				<?php if ( !empty($user_urls) ) foreach ( $user_urls as $url ): ?>
 				<li class="link_details clearfix">
 					<div class="short_link_ct clearfix">
-						<a class="short_link" href="<?php echo Config::get("base_url") . $url["short_url"] ?>">
-							<?php echo  Config::get("base_url") . $url["short_url"] ?>
+						<a class="short_link" href="<?php echo \Fuel\Core\Uri::base() . $url["short_url"] ?>">
+							<?php echo  \Fuel\Core\Uri::base() . $url["short_url"] ?>
 						</a>
 						<span class="clippy">
-							<a class="copy_bto" title="Copy short link to clipboard" href="#" data-short_link="<?php echo Config::get("base_url") . $url["short_url"] ?>">Copy</a>
+							<a class="copy_bto" title="Copy short link to clipboard" href="#" data-short_link="<?php echo \Fuel\Core\Uri::base() . $url["short_url"] ?>">Copy</a>
 						</span>
 					</div>
-					<a class="stats_link" href="<?php echo Config::get("base_url") . $url["short_url"] . "/stats" ?>">
+					<a class="stats_link" href="<?php echo \Fuel\Core\Uri::base() . $url["short_url"] . "/stats" ?>">
 						Stats
 					</a>
 					<a class="long_link" href="<?php echo $url["real_url"] ?>"><?php echo $url["real_url"] ?></a>
