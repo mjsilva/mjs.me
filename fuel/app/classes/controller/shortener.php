@@ -48,7 +48,8 @@ class Controller_Shortener extends Controller_Template {
 		{
 			$short_url = ShortUrl::get_short_url();
 
-			$user_id = Auth::instance()->get_user_id();
+			$user_id = \Auth\Auth::instance()->get_user_id();
+			$user_id = !isset($user_id[1]) ? null : $user_id;
 
 			$db_data = array(
 				"short_url" => $short_url,
@@ -56,7 +57,7 @@ class Controller_Shortener extends Controller_Template {
 				"creator_ip_address" => Input::real_ip(),
 				"date_created" => Date::factory()->format("mysql"),
 				"cookie_id" => Auth::check() ? : $cookie_id,
-				"user_id" => !$user_id ? : $user_id[1]
+				"user_id" => $user_id
 			);
 
 			Model_Url::set_url($db_data);
@@ -90,7 +91,7 @@ class Controller_Shortener extends Controller_Template {
 		$view = View::factory('form');
 		$view->set("validation", $val, false);
 
-		if(Auth::check())
+		if ( Auth::check() )
 		{
 			$user_id = Auth::instance()->get_user_id();
 			$user_id = $user_id[1];
