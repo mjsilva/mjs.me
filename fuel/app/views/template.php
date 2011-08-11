@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="utf-8">
-	<title>Rackspot URL Shortener | RSK.BZ</title>
+	<title><?php echo Model_Options::get("site_title")?> | <?php echo Model_Options::get("site_name")?></title>
 
 	<!--CSS LOAD-->
 	<?php echo Asset::css('reset.css'); ?>
