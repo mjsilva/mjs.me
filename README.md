@@ -4,6 +4,10 @@
 * Version: 1.2.2
 
 ##Changelog
+### v2.0
+* Authentication
+* Api
+* Small bug fixes
 
 ### v1.2.2
 * CSS fix
