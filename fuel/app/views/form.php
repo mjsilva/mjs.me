@@ -2,9 +2,28 @@
 <?php echo Asset::js('shrinkForm.js'); ?>
 <?php echo Asset::css('jquery.jgrowl.css'); ?>
 <div id="shrink_container">
+
 	<div id="actions_container">
-		<?php echo (!Auth::check()) ? Html::anchor("auth/login", "login") . (!Model_Options::get("public") ? "" : " | " . Html::anchor("auth/register", "register")) : Html::anchor("auth/logout", "logout")?>
+		<?php
+		  if ( !Auth::check()
+	):
+		// user is not authenticated
+		echo Html::anchor("auth/login", "login");
+		if ( Model_Options::get("public")
+		) :
+			// if site is open to public allow registering
+			echo " | ";
+			echo Html::anchor("auth/register", "register");
+		endif;
+	else:
+		echo "<span style='float:left;'>Quite fancy to seeing you <strong>" . \Auth\Auth::instance("derpauth")->get_screen_name() . "</strong>!</span>";
+		echo Html::anchor("auth/profile", "profile");
+		echo " | ";
+		echo Html::anchor("auth/logout", "logout");
+	endif;
+		?>
 	</div>
+
 	<?php if ( Model_Options::get("public") OR Auth::check() ): ?>
 	<div id="url_container">
 		<?php echo Form::open(array('action' => Uri::create('set_url'), "id" => "shortener_form")); ?>
@@ -19,6 +38,7 @@
 	<?php else: ?>
 	<?php echo Model_Options::get("private_message") ?>
 	<?php endif; ?>
+
 	<div id="shortened" style="display: <?php echo (empty($user_urls)) ? "none" : "block"?>">
 		<div id="shortened_table_hd" class="clearfix">
 			<strong class="short_link_hd">Short Link</strong>

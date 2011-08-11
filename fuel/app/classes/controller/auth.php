@@ -112,8 +112,81 @@ class Controller_Auth extends Controller_Template {
 		Response::redirect(\Fuel\Core\Uri::base());
 	}
 
+	public function action_profile()
+	{
+		if ( !\Auth\Auth::check() )
+		{
+			Session::set_flash("message", "What the hell are you doing?!");
+			Response::redirect(\Fuel\Core\Uri::base());
+		}
+
+		$val = Validation::factory();
+
+		$old_password_fld = $val->add('old_password', 'Old Password');
+		$new_password_fld = $val->add('new_password', 'New Password');
+		$confirm_password_fld = $val->add('confirm_password', 'Confirm Password');
+
+		$val->add('email', 'New Email')->add_rule("valid_email");
+		$val->add('profile_api_key', 'Api Key');
+		$val->add('profile_username', 'Username');
+
+		if ( \Fuel\Core\Input::post("old_password") )
+		{
+			$old_password_fld->add_rule(array("valid_user" => array($this, "_callback_valid_profile_password")));
+			$val->set_message('valid_user', 'Old Password is not valid.');
+
+			$new_password_fld->add_rule("required");
+			$confirm_password_fld->add_rule("required")->add_rule(array("password_match" => function($value)
+			                                                      { return ($value === Input::post('new_password')); }));
+
+			$val->set_message('password_match', 'Passwords do not match.');
+
+		}
+
+
+		if ( $val->run() )
+		{
+
+			$db_data["email"] = $val->validated("email");
+
+			if ( \Fuel\Core\Input::post("new_password") )
+			{
+				$db_data["password"] = $val->validated("new_password");
+				$db_data["old_password"] = $val->validated("old_password");
+			}
+
+			\Auth\Auth::instance('derpauth')->update_user($db_data);
+
+			Session::set_flash("message", "Heyyy! You have updated your user.");
+			Response::redirect("auth/profile");
+
+
+		}
+		else
+		{
+			$user_id = \Auth\Auth::instance('derpauth')->get_user_id();
+			$user_id = $user_id[1];
+			$user = Model_Users::get_user(array("id" => $user_id))->current();
+
+			$view = View::factory('profile');
+			$view->set("validation", $val, false);
+			$view->set("user", $user, false);
+
+			$this->template->set("content", $view, false);
+
+		}
+
+	}
+
+	public function _callback_valid_profile_password($password)
+	{
+		$username = \Auth\Auth::instance()->get_screen_name();
+		return count(Model_Users::get_user(array("username" => $username, "password" => \Auth\Auth::instance()->hash_password($password)))) > 0;
+	}
+
 	public function _callback_valid_user($password)
 	{
-		return Auth::instance()->login(Input::post('username'), $password);
+		return \Auth\Auth::instance('derpauth')->login(Input::post('username'), $password);
 	}
+
 }

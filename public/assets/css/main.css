@@ -18,6 +18,10 @@ a:visited {
 	color: #626262;
 }
 
+strong {
+	font-weight: bold;
+}
+
 #wrapper {
 	width: 100%;
 }
@@ -227,21 +231,28 @@ a:visited {
 	display: inline-block;
 	text-align: left;
 }
-#form_container em{
+
+#form_container em {
 	color: #a10000;
 	padding-left: 2px;
 }
+
 #form_container #form_username,
 #form_container #form_password,
 #form_container #form_email,
-#form_container #form_confirm_password {
+#form_container #form_confirm_password,
+#form_container .field {
 	background: none repeat scroll 0 0 #FFFFFF;
 	border: 1px solid #CCCCCC;
 	font-size: 16px;
 	height: 19px;
 	padding: 5px 10px;
 	width: 200px;
+	max-width: 200px;
 	color: #626262;
+	overflow: hidden;
+	white-space: nowrap;
+	display: inline-block;
 }
 
 #form_container #submit_container {
@@ -262,7 +273,7 @@ a:visited {
 	padding-top: 10px;
 }
 
-#form_container .email{
+#form_container .email {
 	border-top: none;
 	margin-top: 10px;
 }
