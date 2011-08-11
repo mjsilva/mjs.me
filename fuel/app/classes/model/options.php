@@ -9,7 +9,7 @@
 
 class Model_Options{
 
-	public function get($option_name)
+	public static function get($option_name)
 	{
 		$result = DB::select("*")->from("options")->where("option_name", $option_name)->execute();
 		if(!count($result)) return false;
