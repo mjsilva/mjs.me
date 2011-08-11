@@ -49,7 +49,7 @@ class Controller_Shortener extends Controller_Template {
 			$short_url = ShortUrl::get_short_url();
 
 			$user_id = \Auth\Auth::instance()->get_user_id();
-			$user_id = !isset($user_id[1]) ? null : $user_id;
+			$user_id = !isset($user_id[1]) ? null : $user_id[1];
 
 			$db_data = array(
 				"short_url" => $short_url,
