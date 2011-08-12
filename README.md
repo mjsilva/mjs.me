@@ -10,7 +10,7 @@ MJS.ME allows you to shrink your huge link.
 ##Development Team
 
 * Manuel Joao Silva - Lead Developer ([http://manueljoaosilva.com](http://manueljoaosilva.com))
-m
+
 ##License
 
 MJS.ME is released under the MIT License.
