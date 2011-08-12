@@ -6,10 +6,8 @@ desktop.ini
 .buildpath
 .project
 .settings
-fuel/app/logs/*/*/*
-fuel/app/cache/*/*
 nbproject/
 .idea
-fuel/app/config/migrations.php
-fuel/app/config/db.php
+fuel/app/logs/*/*/*
+fuel/app/cache/*/*
 fuel/app/config/crypt.php
