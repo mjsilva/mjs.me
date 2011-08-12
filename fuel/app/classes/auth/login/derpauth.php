@@ -433,6 +433,25 @@ class Auth_Login_DerpAuth extends \Auth\Auth_Login_Driver {
 	}
 
 	/**
+	 * Check if a user owns a particularly short url
+	 */
+	public function owns_short_url($short_url)
+	{
+		if (empty($this->user))
+		{
+			return false;
+		}
+
+		$url = Model_Url::get_url($short_url);
+
+		if(empty($url)) return false;
+
+		$cookie_id = Cookie::get('cookie_id');
+
+		return $this->user["id"] === $url["user_id"] or $cookie_id === $url["cookie_id"];
+	}
+
+	/**
 	 * Extension of base driver because this supports a guest login when switched on
 	 */
 	public function guest_login()
