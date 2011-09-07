@@ -1,47 +1,72 @@
 <?php
 
-class ShortUrl {
+abstract class ShortUrl {
 
 
-	public static function get_short_url()
+	protected static $_instance = null;
+	protected static $_config = array();
+	protected static $safe_limit = 100;
+
+
+	/**
+	 * Creates a new instance for static use of the class.
+	 *
+	 * @return  Image_Driver
+	 */
+	protected static function instance()
 	{
-		$last_short_url = Model_Url::get_last_short_url();
-		$return = ($last_short_url === NULL) ? static::next("") : static::next($last_short_url);
+		if ( static::$_instance == null )
+		{
+			static::$_instance = static::factory(static::$_config);
+		}
+		return static::$_instance;
+	}
+
+	/**
+	 * Creates a new instance of the image driver
+	 *
+	 * @param  array   $config
+	 * @return Shorturl_Driver
+	 */
+	public static function factory($config = array())
+	{
+		!is_array($config) and $config = array();
+
+		\Config::load('shorturl', 'shorturl');
+		$config = array_merge(\Config::get('shorturl', array()), $config);
+
+		$algorithm = ucfirst(!empty($config['driver']) ? $config['driver'] : 'short');
+
+		$config['set'] = !empty($config['set']) ? $config['set'] : 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_';
+		$config['fixed_length'] = !empty($config['fixed_length']) ? $config['fixed_length'] : 5;
+
+		$class = 'Shorturl_' . $algorithm;
+		if ( $algorithm == 'Driver' || !class_exists($class) )
+		{
+			throw new \Fuel_Exception('Driver ' . $algorithm . ' is not a valid driver for shortening url.');
+		}
+		
+		$return = new $class($config);
 		return $return;
 	}
 
-
-	public static function next($n, $pos = 0)
+	public static function get_short_url()
 	{
-		static $set = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_';
-		static $setmax = 63;
+		$url = '';
+		$safecnt = 0;
 
-		if ( strlen($n) === 0 )
+		do
 		{
-			// no string
-			return $set[0];
-		}
+			$url = self::next($url);
+			$safecnt++;
+			
+		} while ( Model_Url::short_url_exist($url) && $safecnt <= self::$safe_limit );
 
-		$nindex = strlen($n) - 1 - $pos;
-		if ( $nindex < 0 )
-		{
-			// add a new digit to the front of the number
-			return $set[0] . $n;
-		}
-
-		$char = $n[$nindex];
-		$setindex = strpos($set, $char);
-
-		if ( $setindex == $setmax )
-		{
-			$n[$nindex] = $set[0];
-			return static::next($n, $pos + 1);
-		}
-		else
-		{
-			$n[$nindex] = $set[$setindex + 1];
-			return $n;
-		}
+		return $url;
 	}
 
+	private static function next($last = '')
+	{
+		return static::instance()->next($last);
+	}
 }
