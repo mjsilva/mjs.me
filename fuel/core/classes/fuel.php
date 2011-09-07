@@ -53,7 +53,7 @@ class Fuel {
 	const L_INFO = 3;
 	const L_ALL = 4;
 
-	const VERSION = '1.0';
+	const VERSION = '1.0.1';
 
 	public static $initialized = false;
 
@@ -112,7 +112,7 @@ class Fuel {
 		set_error_handler('fuel_error_handler');
 
 		// Start up output buffering
-		ob_start();
+		ob_start(\Config::get('ob_callback', null));
 
 		static::$profiling = \Config::get('profiling', false);
 
