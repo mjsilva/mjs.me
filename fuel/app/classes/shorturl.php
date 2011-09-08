@@ -5,7 +5,7 @@ abstract class ShortUrl {
 
 	protected static $_instance = null;
 	protected static $_config = array();
-	protected static $safe_limit = 100;
+	protected static $safe_limit = 100000;
 
 
 	/**
@@ -60,7 +60,7 @@ abstract class ShortUrl {
 			$url = self::next($url);
 			$safecnt++;
 			
-		} while ( Model_Url::short_url_exist($url) && $safecnt <= self::$safe_limit );
+		} while ( Model_Url::short_url_exist($url) && $safecnt < self::$safe_limit );
 
 		return $url;
 	}
