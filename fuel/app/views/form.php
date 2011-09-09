@@ -40,7 +40,9 @@
 				<?php echo \Fuel\Core\Form::input("custom_shorturl", null, array("title" => "Insert your custom short url")); ?>
 
 				<?php echo \Fuel\Core\Form::label("Algorithm: ", "algorithm")?>
-				<?php echo \Fuel\Core\Form::select("algorithm", $validation->input('algorithm', 'short'), array("short" => "Shortest", "fixed" => "Fixed")); ?>
+				<?php echo \Fuel\Core\Form::select("algorithm", $validation->input('algorithm', Model_Options::get("shorturl_driver")), array(
+				                                                                                                                             "short" => "Shortest",
+				                                                                                                                             "fixed" => "Fixed")); ?>
 				<?php echo \Fuel\Core\Form::label("Size: ", "fixed_size")?>
 				<?php echo \Fuel\Core\Form::input("fixed_size", $validation->input('fixed_size', Model_Options::get("shorturl_fixed_length")), array(
 				                                                                                          "title" => "Short link size",
