@@ -42,7 +42,7 @@
 				<?php echo \Fuel\Core\Form::label("Algorithm: ", "algorithm")?>
 				<?php echo \Fuel\Core\Form::select("algorithm", $validation->input('algorithm', 'short'), array("short" => "Shortest", "fixed" => "Fixed")); ?>
 				<?php echo \Fuel\Core\Form::label("Size: ", "fixed_size")?>
-				<?php echo \Fuel\Core\Form::input("fixed_size", $validation->input('fixed_size', 5), array(
+				<?php echo \Fuel\Core\Form::input("fixed_size", $validation->input('fixed_size', Model_Options::get("shorturl_fixed_length")), array(
 				                                                                                          "title" => "Short link size",
 				                                                                                          "maxlength" => 3,
 				                                                                                          "size" => 2)); ?>
