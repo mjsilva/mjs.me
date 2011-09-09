@@ -14,7 +14,7 @@ $(function() {
 
 		e.preventDefault();
 
-		$.post($(this).attr("action"), {url: $("#form_url").val()}, function(resp) {
+		$.post($(this).attr("action"), $("#shortener_form").serialize(), function(resp) {
 			if (!resp) return false;
 
 			if (typeof resp.errors != "undefined") {
@@ -28,7 +28,8 @@ $(function() {
 			$(myShortenedSkeleton).find("a.long_link").html(resp.long_link).attr("href", resp.long_link);
 
 			$("ul#shortened_results").prepend(myShortenedSkeleton);
-			$("#url_input input").val("");
+			$("#url_input").val("");
+			$("#form_custom_shorturl").val("");
 
 			if (!$("#shortened").is(":visible")) {
 				$("#shortened").fadeIn();
@@ -41,6 +42,16 @@ $(function() {
 	});
 
 	assignZclipTrigger();
+
+
+	// more options
+	$("#options_toggle").click(function(){
+		$("#options_elements").slideToggle("fast");
+	});
+
+	$("#options_elements").hide();
+	$("#options_toggle").show();
+
 });
 
 var assignZclipTrigger = function() {

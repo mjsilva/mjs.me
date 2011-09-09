@@ -21,7 +21,9 @@ a:visited {
 strong {
 	font-weight: bold;
 }
-
+.hidden {
+	display: none;
+}
 #wrapper {
 	width: 100%;
 }
@@ -71,24 +73,22 @@ strong {
 	border: 1px solid #626262;
 	float: none;
 	margin: 0 auto;
-	padding: 15px;
+	padding: 15px 15px 5px 15px;
 	position: relative;
 	text-align: left;
 	width: 690px;
-	height: 34px;
 }
 
-#url_input input {
+#url_input {
 	background: none repeat scroll 0 0 #FFFFFF;
 	border: 1px solid #CCCCCC;
-	float: left;
 	font-size: 16px;
 	height: 19px;
 	padding: 5px 10px;
 	width: 580px;
 }
 
-#url_submit input {
+#url_submit {
 	margin-left: 10px;
 	background: none repeat scroll 0 0 #FFF;
 	color: #626262;
@@ -97,12 +97,7 @@ strong {
 	padding: 5px 10px;
 }
 
-#url_submit {
-	height: 31px;
-	float: left;
-}
-
-#url_submit input:hover {
+#url_submit:hover {
 	/*border: 1px solid #CCC;*/
 	cursor: pointer;
 }
@@ -245,7 +240,6 @@ strong {
 	background: none repeat scroll 0 0 #FFFFFF;
 	border: 1px solid #CCCCCC;
 	font-size: 16px;
-	height: 19px;
 	padding: 5px 10px;
 	width: 200px;
 	max-width: 200px;
@@ -276,6 +270,46 @@ strong {
 #form_container .email {
 	border-top: none;
 	margin-top: 10px;
+}
+
+/* Form Options */
+#form_options {
+	color: #FFFFFF;
+	padding-top: 10px;
+	font-size: 0.8em;
+}
+
+#form_options #options_toggle {
+	color: #FFFFFF;
+	margin-bottom: 5px;
+	width: 80px;
+}
+
+#form_fixed_size {
+	text-align: right;
+}
+
+#options_elements input,
+#options_elements select {
+	background: none repeat scroll 0 0 #FFFFFF;
+	border: 1px solid #CCCCCC;
+	font-size: 0.9em;
+}
+
+#options_elements label {
+	margin-left: 6px;
+}
+
+.fake_link {
+	border: 0 none;
+	color: #CD2626;
+	text-decoration: none;
+}
+
+.fake_link:hover {
+	color: #CD2626;
+	cursor: pointer;
+	text-decoration: none;
 }
 
 /****************************************************************

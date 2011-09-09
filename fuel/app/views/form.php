@@ -27,11 +27,27 @@
 	<?php if ( Model_Options::get("public") OR Auth::check() ): ?>
 	<div id="url_container">
 		<?php echo Form::open(array('action' => Uri::create('set_url'), "id" => "shortener_form")); ?>
-		<div id="url_input">
-			<?php echo Form::input('url', $validation->input('url')); ?>
+		<div id="">
+			<?php echo Form::input('url', $validation->input('url'), array("id" => "url_input", "title" => "Paste your long url")); ?>
+			<?php echo Form::submit('submit', 'Shrink', array("id" => "url_submit")); ?>
 		</div>
-		<div id="url_submit">
-			<?php echo Form::submit('submit', 'Shrink'); ?>
+
+		<div id="form_options">
+			<?php if ( Auth::check() ): ?>
+			<div id="options_toggle" class="fake_link hidden">More Options</div>
+			<div id="options_elements">
+				<?php echo \Fuel\Core\Form::label("Custom: ", "algorithm")?>
+				<?php echo \Fuel\Core\Form::input("custom_shorturl", null, array("title" => "Insert your custom short url")); ?>
+
+				<?php echo \Fuel\Core\Form::label("Algorithm: ", "algorithm")?>
+				<?php echo \Fuel\Core\Form::select("algorithm", $validation->input('algorithm', 'short'), array("short" => "Shortest", "fixed" => "Fixed")); ?>
+				<?php echo \Fuel\Core\Form::label("Size: ", "fixed_size")?>
+				<?php echo \Fuel\Core\Form::input("fixed_size", $validation->input('fixed_size', 5), array(
+				                                                                                          "title" => "Short link size",
+				                                                                                          "maxlength" => 3,
+				                                                                                          "size" => 2)); ?>
+			</div>
+			<?php endif; ?>
 		</div>
 		<?php echo Form::close(); ?>
 	</div>

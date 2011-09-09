@@ -40,13 +40,50 @@ class Controller_Shortener extends Controller_Template {
 					           return (strpos($url, Uri::base(), 0) === FALSE);
 				           }));
 
+		$val->add('custom_shorturl', 'Custom')
+				->add_rule("trim")
+				->add_rule(array("shorturl_exists" => array($this, "action_shorturl_exists")));
 
-		$val->set_message('valid_domain', 'This is already a mjs.me url.');
+		$val->add("algorithm", "Algorithm")->add_rule("trim");
+
+		if ( !\Fuel\Core\Input::post("custom_shorturl") )
+		{
+			$val->add("fixed_size", "Size")
+					->add_rule("trim")
+					->add_rule("numeric_min", 1)
+					->add_rule("numeric_max", 200)
+					->add_rule("numeric_min", Model_Options::get("shorturl_fixed_length"));
+		}
+
+		$val->set_message('valid_domain', 'This is already a ' . Model_Options::get("site_name") . ' url.');
 		$val->set_message('valid_url', 'What? This is not a valid URL, focus!');
+		$val->set_message('shorturl_exists', 'Someone has already used that custom short url.');
+
 
 		if ( $val->run() )
 		{
-			$short_url = ShortUrl::get_short_url();
+
+			if ( Auth::check() )
+			{
+				if ( Input::post('custom_shorturl') )
+				{
+					$short_url = Input::post('custom_shorturl');
+				}
+				else
+				{
+					ShortUrl::set_config(array(
+					                          "driver" => Input::post('algorithm'),
+					                          "fixed_length" => Input::post('fixed_size'),
+					                     ));
+
+					$short_url = ShortUrl::get_short_url();
+				}
+			}
+			else
+			{
+				$short_url = ShortUrl::get_short_url();
+			}
+
 
 			$user_id = \Auth\Auth::instance()->get_user_id();
 			$user_id = !isset($user_id[1]) ? null : $user_id[1];
@@ -107,6 +144,11 @@ class Controller_Shortener extends Controller_Template {
 
 
 		$this->template->set("content", $view, false);
+	}
+
+	public function action_shorturl_exists($custom_shorturl)
+	{
+		return !Model_Url::short_url_exist($custom_shorturl);
 	}
 
 	public function action_get_url($url)

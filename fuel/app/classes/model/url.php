@@ -78,4 +78,12 @@ class Model_Url {
 
 	}
 
+	public static function get_shorturls()
+	{
+		$results = DB::select("short_url")->from('urls')->execute();
+		$results = $results->as_array();
+		foreach ( $results as $k => $v ) $flat_array[] = $v["short_url"];
+		return $flat_array;
+	}
+
 }

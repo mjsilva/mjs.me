@@ -188,11 +188,4 @@ class Controller_Auth extends Controller_Template {
 	{
 		return \Auth\Auth::instance('derpauth')->login(Input::post('username'), $password);
 	}
-
-
-	public function action_test()
-	{
-		echo shorturl::next();
-	}
-
 }

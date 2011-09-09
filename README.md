@@ -26,6 +26,11 @@ MJS.ME is released under the MIT License.
 ##Changelog
 
 <pre>
+## v3.0
+* Allow Custom Urls when logged in
+* Allow to choose shortening Algorithm when logged in
+* Changed short url length in schema
+
 ## v2.1
 * Added migration DB schema
 * Several clean ups and small fixes

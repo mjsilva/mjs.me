@@ -5,8 +5,6 @@ abstract class ShortUrl {
 
 	protected static $_instance = null;
 	protected static $_config = array();
-	protected static $safe_limit = 100000;
-
 
 	/**
 	 * Creates a new instance for static use of the class.
@@ -50,17 +48,28 @@ abstract class ShortUrl {
 		return $return;
 	}
 
+	public static function set_config($config)
+	{
+		self::$_config = $config;
+	}
+
 	public static function get_short_url()
 	{
 		$url = '';
 		$safecnt = 0;
+		$shorturls = Model_Url::get_shorturls();
 
 		do
 		{
 			$url = self::next($url);
 			$safecnt++;
 			
-		} while ( Model_Url::short_url_exist($url) && $safecnt < self::$safe_limit );
+		} while ( in_array($url, $shorturls, true) );
+
+		if(in_array($url, $shorturls, true))
+		{
+			throw new Exception("No URLS availible");
+		}
 
 		return $url;
 	}

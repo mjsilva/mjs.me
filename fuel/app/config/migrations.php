@@ -27,7 +27,7 @@ return array(
 	|	Default: 0
 	|
 	*/
-	'version' => 6,
+	'version' => 7,
 
 	/*
 	| Where are these migrations stored?
